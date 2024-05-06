@@ -1,0 +1,38 @@
+# generic files to ignore
+*.log
+*.tmp
+*~
+*.lock
+*.DS_Store
+*.swp
+*.out
+[Tt]humbs.db
+
+#Eclipse files
+.project
+.classpath
+.settings
+
+#Intellij files
+*.iml
+.idea/
+
+#Java and Maven
+*.class
+*.jar
+target
+lib
+
+#TestNG
+null/
+test-output/
+
+#NetBeans files
+nbproject
+
+
+#Project files
+config.properties
+difido.properties
+remoteDifido.properties
+video/
