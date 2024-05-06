@@ -56,7 +56,7 @@ public class TestAddTask extends AbstractTestCase {
         // Check that task creation pop up is visible:
 
         assertThat(workPackagesPage.getTextOfTaskCreationResultMsg()).as("Verify that pop-up for successful creation " +
-                        "of %s was successful", newTaskSubject)
+                        "of %s is visible", newTaskSubject)
                 .isEqualTo("Successful creation.");
 
         // Search for newly created task and ensure that it exists:
