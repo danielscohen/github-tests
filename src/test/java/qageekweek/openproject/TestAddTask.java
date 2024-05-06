@@ -1,5 +1,6 @@
 package qageekweek.openproject;
 
+import lombok.Cleanup;
 import lombok.val;
 import lombok.var;
 import org.openqa.selenium.By;
@@ -18,7 +19,11 @@ import qageekweek.openproject.po.MainPage;
 import qageekweek.openproject.po.SignInPage;
 import qageekweek.openproject.po.WorkPackagesPage;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.time.Duration;
+import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
@@ -34,13 +39,16 @@ public class TestAddTask {
     }
 
     @Test
-    public void testAddTask() throws InterruptedException {
+    public void testAddTask() throws InterruptedException, FileNotFoundException, IOException {
+
         Random random = new Random();
+
+        val openProjectCredentials = getOpenProjectCredentials();
 
         val newTaskSubject = "Very Important Task " + random.nextInt();
         val newTaskDescription = "Very important description!";
-        val username = "PLACE_HOLDER";
-        val password = "PLACE_HOLDER";
+        val username = openProjectCredentials.getProperty("username");
+        val password = openProjectCredentials.getProperty("password");
 
         // Login:
 
@@ -79,6 +87,17 @@ public class TestAddTask {
         Assert.assertEquals(workPackagesPage.getTextOfTaskFilterResult(), newTaskSubject);
 
         TimeUnit.SECONDS.sleep(4);
+    }
+
+    private static Properties getOpenProjectCredentials() throws FileNotFoundException, IOException{
+        val rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
+        val openProjectCredentialsPath = rootPath + "/../../openProject.properties";
+        val openProjectCredentials = new Properties();
+
+        @Cleanup val is = new FileInputStream(openProjectCredentialsPath);
+        openProjectCredentials.load(is);
+
+        return openProjectCredentials;
     }
 
 //    @Test
