@@ -1,5 +1,7 @@
 package qageekweek.openproject;
 
+import lombok.val;
+import lombok.var;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -35,24 +37,24 @@ public class TestAddTask {
     public void testAddTask() throws InterruptedException {
         Random random = new Random();
 
-        final String newTaskSubject = "Very Important Task " + random.nextInt();
-        final String newTaskDescription = "Very important description!";
-        final String username = "PLACE_HOLDER";
-        final String password = "PLACE_HOLDER";
+        val newTaskSubject = "Very Important Task " + random.nextInt();
+        val newTaskDescription = "Very important description!";
+        val username = "PLACE_HOLDER";
+        val password = "PLACE_HOLDER";
 
         // Login:
 
-        ActionBot bot = new ActionBot(driver);
+        val bot = new ActionBot(driver);
 
-        SignInPage signInPage = new SignInPage(bot);
-        MainPage mainPage = signInPage.typeToUsernameOrEmailTb(username)
+        val signInPage = new SignInPage(bot);
+        val mainPage = signInPage.typeToUsernameOrEmailTb(username)
                 .typeToPasswordTb(password)
                 .clickOnSignInBtnAndGoToMainPage();
 
         // Navigate to Demo project:
 
-        ProjectOverviewPage projectOverviewPage = mainPage.clickOnSelectAProjectBtn().clickOnDemoProjectBtnAndGoToProjectOverviewPage();
-        WorkPackagesPage workPackagesPage = projectOverviewPage.clickOnWorkPackagesBtnAndGoToWorkPackagesPage();
+        val projectOverviewPage = mainPage.clickOnSelectAProjectBtn().clickOnDemoProjectBtnAndGoToProjectOverviewPage();
+        val workPackagesPage = projectOverviewPage.clickOnWorkPackagesBtnAndGoToWorkPackagesPage();
 
         // Create new task:
 
