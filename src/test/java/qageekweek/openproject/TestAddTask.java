@@ -2,31 +2,19 @@ package qageekweek.openproject;
 
 import lombok.Cleanup;
 import lombok.val;
-import lombok.var;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.testng.Assert;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 import qageekweek.openproject.AbstractTestCase;
 import qageekweek.ActionBot;
-import qageekweek.openproject.po.ProjectOverviewPage;
-import qageekweek.openproject.po.MainPage;
 import qageekweek.openproject.po.SignInPage;
-import qageekweek.openproject.po.WorkPackagesPage;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.time.Duration;
 import java.util.Properties;
 import java.util.Random;
 import java.util.concurrent.TimeUnit;
+
+import static org.assertj.core.api.Assertions.*;
 
 public class TestAddTask extends AbstractTestCase {
 
@@ -67,21 +55,23 @@ public class TestAddTask extends AbstractTestCase {
 
         // Check that task creation pop up is visible:
 
-
-        Assert.assertEquals(workPackagesPage.getTextOfTaskCreationResultMsg(), "Successful creation.");
-
+        assertThat(workPackagesPage.getTextOfTaskCreationResultMsg()).as("Verify that pop-up for successful creation " +
+                        "of %s was successful", newTaskSubject)
+                .isEqualTo("Successful creation.");
 
         // Search for newly created task and ensure that it exists:
 
         workPackagesPage.clickOnFilterWorkPackagesBtn()
-                        .typeToFilterByTextTb(newTaskSubject);
+                .typeToFilterByTextTb(newTaskSubject);
 
-        Assert.assertEquals(workPackagesPage.getTextOfTaskFilterResult(), newTaskSubject);
+        assertThat(workPackagesPage.getTextOfTaskFilterResult()).as("Verify that %s is the filter result",
+                        newTaskDescription)
+                .isEqualTo(newTaskSubject);
 
         TimeUnit.SECONDS.sleep(4);
     }
 
-    private static Properties getOpenProjectCredentials() throws FileNotFoundException, IOException{
+    private static Properties getOpenProjectCredentials() throws FileNotFoundException, IOException {
         val rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
         val openProjectCredentialsPath = rootPath + "/../../openProject.properties";
         val openProjectCredentials = new Properties();
@@ -111,24 +101,33 @@ public class TestAddTask extends AbstractTestCase {
 //
 //        // Navigate to Demo project:
 //
-//        WebElement projectsDropDown = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions.elementToBeClickable(By.id("projects-menu")));
+//        WebElement projectsDropDown = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions
+//        .elementToBeClickable(By.id("projects-menu")));
 //        projectsDropDown.click();
-//        WebElement demoProject = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions.elementToBeClickable(By.xpath("//span[text()=\"Demo project\"]")));
+//        WebElement demoProject = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions
+//        .elementToBeClickable(By.xpath("//span[text()=\"Demo project\"]")));
 //        demoProject.click();
 //
 //        // Create new task:
 //
-//        WebElement workPackagesButton = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions.elementToBeClickable(By.id("main-menu-work-packages")));
+//        WebElement workPackagesButton = (new WebDriverWait(driver, Duration.ofSeconds(10))).until
+//        (ExpectedConditions.elementToBeClickable(By.id("main-menu-work-packages")));
 //        workPackagesButton.click();
-//        WebElement createWorkPackageDropDown = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions.elementToBeClickable(By.cssSelector(".button.-primary.add-work-package")));
+//        WebElement createWorkPackageDropDown = (new WebDriverWait(driver, Duration.ofSeconds(10))).until
+//        (ExpectedConditions.elementToBeClickable(By.cssSelector(".button.-primary.add-work-package")));
 //        createWorkPackageDropDown.click();
-//        WebElement createTaskSelection = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions.elementToBeClickable(By.cssSelector("a[aria-label=\"Task\"]")));
+//        WebElement createTaskSelection = (new WebDriverWait(driver, Duration.ofSeconds(10))).until
+//        (ExpectedConditions.elementToBeClickable(By.cssSelector("a[aria-label=\"Task\"]")));
 //        createTaskSelection.click();
-//        WebElement taskSubjectField = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions.elementToBeClickable(By.id("wp-new-inline-edit--field-subject")));
+//        WebElement taskSubjectField = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions
+//        .elementToBeClickable(By.id("wp-new-inline-edit--field-subject")));
 //        taskSubjectField.sendKeys(newTaskSubject);
-//        WebElement taskDescriptionField = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions.elementToBeClickable(By.cssSelector("div[aria-label=\"Rich Text Editor. Editing area: main\"]")));
+//        WebElement taskDescriptionField = (new WebDriverWait(driver, Duration.ofSeconds(10))).until
+//        (ExpectedConditions.elementToBeClickable(By.cssSelector("div[aria-label=\"Rich Text Editor. Editing area:
+//        main\"]")));
 //        taskDescriptionField.sendKeys(newTaskDescription);
-//        WebElement newTaskSaveButton = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions.elementToBeClickable(By.id("work-packages--edit-actions-save")));
+//        WebElement newTaskSaveButton = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions
+//        .elementToBeClickable(By.id("work-packages--edit-actions-save")));
 //        newTaskSaveButton.click();
 //
 //        // Check that task creation pop up is visible:
@@ -136,25 +135,31 @@ public class TestAddTask extends AbstractTestCase {
 //        boolean taskCreationSuccessfulToastVisible = true;
 //
 //        try {
-//            (new WebDriverWait(driver, Duration.ofSeconds(5))).until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".-success.op-toast")));
+//            (new WebDriverWait(driver, Duration.ofSeconds(5))).until(ExpectedConditions.visibilityOfElementLocated
+//            (By.cssSelector(".-success.op-toast")));
 //        } catch (org.openqa.selenium.TimeoutException ex) {
 //            taskCreationSuccessfulToastVisible = false;
 //        }
 //
-//        org.testng.Assert.assertTrue(taskCreationSuccessfulToastVisible, "New task creation successful toast is visible");
+//        org.testng.Assert.assertTrue(taskCreationSuccessfulToastVisible, "New task creation successful toast is
+//        visible");
 //
 //
 //        // Search for newly created task and ensure that it exists:
 //
-//        WebElement filterButton = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions.elementToBeClickable(By.id("work-packages-filter-toggle-button")));
+//        WebElement filterButton = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions
+//        .elementToBeClickable(By.id("work-packages-filter-toggle-button")));
 //        filterButton.click();
-//        WebElement filterTextField = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions.elementToBeClickable(By.id("filter-by-text-input")));
+//        WebElement filterTextField = (new WebDriverWait(driver, Duration.ofSeconds(10))).until(ExpectedConditions
+//        .elementToBeClickable(By.id("filter-by-text-input")));
 //        filterTextField.sendKeys(newTaskSubject);
 //
 //        boolean newTaskVisible = true;
 //
 //        try {
-//            (new WebDriverWait(driver, Duration.ofSeconds(5))).until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//span[text()=\"" + newTaskSubject + "\" and @class=\"inline-edit--display-field subject -required -editable\"]")));
+//            (new WebDriverWait(driver, Duration.ofSeconds(5))).until(ExpectedConditions.visibilityOfElementLocated
+//            (By.xpath("//span[text()=\"" + newTaskSubject + "\" and @class=\"inline-edit--display-field subject
+//            -required -editable\"]")));
 //        } catch (org.openqa.selenium.TimeoutException ex) {
 //            newTaskVisible = false;
 //        }
@@ -176,8 +181,6 @@ public class TestAddTask extends AbstractTestCase {
 //        Assert.assertTrue(resultElement.getText().contains("Cheese"));
 //        TimeUnit.SECONDS.sleep(4);
 //    }
-
-
 
 
 }
