@@ -32,6 +32,8 @@ public class TestAddTask extends AbstractTestCase {
 
         // Login:
 
+        report.startLevel("Login");
+
         val bot = new ActionBot(driver);
 
         val signInPage = new SignInPage(bot);
@@ -39,12 +41,18 @@ public class TestAddTask extends AbstractTestCase {
                 .typeToPasswordTb(password)
                 .clickOnSignInBtnAndGoToMainPage();
 
+        report.endLevel();
+
         // Navigate to Demo project:
+        report.startLevel("Navigate to Demo project");
 
         val projectOverviewPage = mainPage.clickOnSelectAProjectBtn().clickOnDemoProjectBtnAndGoToProjectOverviewPage();
         val workPackagesPage = projectOverviewPage.clickOnWorkPackagesBtnAndGoToWorkPackagesPage();
 
+        report.endLevel();
+
         // Create new task:
+        report.startLevel("Create new task");
 
         workPackagesPage.clickOnCreateNewWorkPackageBtn()
                 .clickOnCreateNewTaskBtn()
@@ -52,14 +60,18 @@ public class TestAddTask extends AbstractTestCase {
                 .typeToTaskDescriptionTb(newTaskDescription)
                 .clickOnSaveTaskBtn();
 
+        report.endLevel();
 
         // Check that task creation pop up is visible:
+        report.startLevel("Check that task creation pop up is visible");
 
         assertThat(workPackagesPage.getTextOfTaskCreationResultMsg()).as("Verify that pop-up for successful creation " +
                         "of %s is visible", newTaskSubject)
                 .isEqualTo("Successful creation.");
 
+        report.endLevel();
         // Search for newly created task and ensure that it exists:
+        report.startLevel("Search for newly created task and ensure that it exists");
 
         workPackagesPage.clickOnFilterWorkPackagesBtn()
                 .typeToFilterByTextTb(newTaskSubject);
@@ -69,6 +81,7 @@ public class TestAddTask extends AbstractTestCase {
                 .isEqualTo(newTaskSubject);
 
         TimeUnit.SECONDS.sleep(4);
+        report.endLevel();
     }
 
     private static Properties getOpenProjectCredentials() throws FileNotFoundException, IOException {
