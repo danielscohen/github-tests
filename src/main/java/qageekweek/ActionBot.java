@@ -3,6 +3,7 @@ package qageekweek;
 import java.io.File;
 import java.time.Duration;
 
+import lombok.val;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -59,10 +60,21 @@ public class ActionBot {
         return this;
     }
 
-    public ActionBot typeTo(By by, String keys) {
+    public ActionBot typeTo(By by, String keys, boolean clearFirst) {
+        val element = searcher.findElement(by);
+
+        if(clearFirst){
+            report("clear", by);
+            element.clear();
+        }
+
         report("type to", by);
-        searcher.findElement(by).sendKeys(keys);
+        element.sendKeys(keys);
         return this;
+    }
+
+    public ActionBot typeTo(By by, String keys) {
+        return this.typeTo(by, keys, false);
     }
 
     public ActionBot typeTo(By by, Keys keys) {

@@ -5,6 +5,7 @@ import lombok.val;
 import org.testng.annotations.Test;
 import qageekweek.openproject.AbstractTestCase;
 import qageekweek.ActionBot;
+import qageekweek.openproject.po.MainPage;
 import qageekweek.openproject.po.SignInPage;
 
 import java.io.FileInputStream;
@@ -23,25 +24,10 @@ public class TestAddTask extends AbstractTestCase {
 
         Random random = new Random();
 
-        val openProjectCredentials = getOpenProjectCredentials();
-
         val newTaskSubject = "Very Important Task " + random.nextInt();
         val newTaskDescription = "Very important description!";
-        val username = openProjectCredentials.getProperty("username");
-        val password = openProjectCredentials.getProperty("password");
 
-        // Login:
-
-        report.startLevel("Login");
-
-        val bot = new ActionBot(driver);
-
-        val signInPage = new SignInPage(bot);
-        val mainPage = signInPage.typeToUsernameOrEmailTb(username)
-                .typeToPasswordTb(password)
-                .clickOnSignInBtnAndGoToMainPage();
-
-        report.endLevel();
+        MainPage mainPage = loginToOpenProjectWebsite();
 
         // Navigate to Demo project:
         report.startLevel("Navigate to Demo project");
@@ -82,17 +68,6 @@ public class TestAddTask extends AbstractTestCase {
 
         TimeUnit.SECONDS.sleep(4);
         report.endLevel();
-    }
-
-    private static Properties getOpenProjectCredentials() throws FileNotFoundException, IOException {
-        val rootPath = Thread.currentThread().getContextClassLoader().getResource("").getPath();
-        val openProjectCredentialsPath = rootPath + "/../../openProject.properties";
-        val openProjectCredentials = new Properties();
-
-        @Cleanup val is = new FileInputStream(openProjectCredentialsPath);
-        openProjectCredentials.load(is);
-
-        return openProjectCredentials;
     }
 
 //    @Test

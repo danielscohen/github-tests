@@ -9,6 +9,7 @@ public class MainPage extends AbstractPage {
 
 	private final static By SELECT_A_PROJECT_BTN_BY = DBy.id("projects-menu","Select a project button");
 	private final static By DEMO_PROJECT_BTN_BY = DBy.xpath("//span[text()=\"Demo project\"]","Demo project button");
+	private final static By MEETINGS_BTN_BY = DBy.id("meetings-wrapper","Meetings button");
 
 	public MainPage(ActionBot bot) {
 		super(bot);
@@ -22,6 +23,11 @@ public class MainPage extends AbstractPage {
 	public ProjectOverviewPage clickOnDemoProjectBtnAndGoToProjectOverviewPage(){
 		bot.waitForVisible(DEMO_PROJECT_BTN_BY).clickOn(DEMO_PROJECT_BTN_BY);
 		return new ProjectOverviewPage(bot);
+	}
+
+	public MeetingsPage clickOnMeetingsButtonAndGoToMeetingsPage(){
+		bot.waitForVisible(MEETINGS_BTN_BY).clickOn(MEETINGS_BTN_BY);
+		return new MeetingsPage(bot);
 	}
 
 	@Override
